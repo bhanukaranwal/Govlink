@@ -1,0 +1,86 @@
+app:
+  name: GovLink
+  version: 1.0.0
+  environment: development
+  debug: true
+
+api:
+  usajobs:
+    base_url: https://data.usajobs.gov/api
+    version: v1
+    rate_limit: 1
+  openai:
+    model: gpt-4
+    fallback: local
+  
+ai:
+  models:
+    resume_generation:
+      name: mistralai/Mistral-7B-Instruct-v0.3
+      max_length: 2048
+      temperature: 0.7
+    skill_matching:
+      name: sentence-transformers/all-MiniLM-L6-v2
+      threshold: 0.75
+    exam_generation:
+      name: meta-llama/Llama-3.2-3B-Instruct
+      max_length: 1024
+      
+scraping:
+  targets:
+    - name: USAJOBS
+      url: https://data.usajobs.gov/api/search
+      method: api
+      rate_limit: 3
+      enabled: true
+    - name: GovernmentJobs
+      url: https://www.governmentjobs.com
+      method: scrape
+      rate_limit: 5
+      enabled: false
+    - name: IndiaGov
+      url: https://www.ncs.gov.in
+      method: scrape
+      rate_limit: 5
+      enabled: false
+  user_agent: GovLink/1.0 (+https://govlink.org/bot)
+  respect_robots: true
+  max_concurrent: 5
+
+languages:
+  supported:
+    - code: en
+      name: English
+      default: true
+    - code: es
+      name: Spanish
+    - code: hi
+      name: Hindi
+    - code: fr
+      name: French
+    - code: de
+      name: German
+    - code: pt
+      name: Portuguese
+    - code: ar
+      name: Arabic
+    - code: zh
+      name: Chinese
+    - code: ja
+      name: Japanese
+    - code: ru
+      name: Russian
+
+features:
+  ai_resume_builder: true
+  auto_application: true
+  exam_prep: true
+  skill_matching: true
+  community_forum: true
+  admin_portal: false
+
+security:
+  jwt_expiry_hours: 24
+  refresh_token_days: 30
+  max_login_attempts: 5
+  password_min_length: 8
